@@ -14,11 +14,10 @@ fn solve2(input: &str) -> usize {
         .filter_map(|l| Game::from_str(l).ok())
         .collect();
 
-    games.iter().fold(0, |acc, game| {
-        let cubes = game.find_min_cubes();
-        let cubes_power: usize = cubes.iter().product();
-        acc + cubes_power
-    })
+    games
+        .iter()
+        .map(|game| game.find_min_cubes().iter().product::<usize>())
+        .sum()
 }
 
 pub fn answer1() {
@@ -34,13 +33,11 @@ fn solve1(input: &str, cubes: Vec<usize>) -> usize {
         .filter_map(|l| Game::from_str(l).ok())
         .collect();
 
-    games.iter().fold(0, |acc, game| {
-        if game.valid(&cubes) {
-            acc + game.index
-        } else {
-            acc
-        }
-    })
+    games
+        .iter()
+        .filter(|&game| game.valid(&cubes))
+        .map(|game| game.index)
+        .sum()
 }
 
 #[derive(Debug)]
