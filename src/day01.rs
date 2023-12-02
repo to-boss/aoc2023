@@ -27,7 +27,10 @@ fn solve2(input: &str) -> usize {
             .chars()
             .enumerate()
             .filter(|(_, c)| c.is_numeric())
-            .map(|(i, c)| (i, c.to_digit(10).unwrap() as usize))
+            .filter_map(|(i, c)| {
+                let n = c.to_digit(10);
+                n.map(|n| (i, n as usize))
+            })
             .collect();
 
         // could be a fold
