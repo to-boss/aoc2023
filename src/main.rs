@@ -12,10 +12,10 @@ fn main() {
     day02::answer1();
     day02::answer2();
     day03::answer1();
+    day03::answer2();
+    day04::answer1();
     day04::answer2();
     day05::answer1();
     day05::answer2();
     */
-    day03::answer1();
-    day03::answer2();
 }
