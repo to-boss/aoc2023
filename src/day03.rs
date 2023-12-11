@@ -10,13 +10,6 @@ enum Cell {
 }
 
 impl Cell {
-    fn inner_num(&self) -> Option<usize> {
-        match self {
-            Cell::Num(n) => Some(*n),
-            _ => None,
-        }
-    }
-
     fn from_char(c: char) -> Self {
         match c {
             '.' => Self::Dot,
@@ -76,11 +69,13 @@ impl Engine {
                     for (num_x, num_y) in num.positions.iter() {
                         if x.abs_diff(*num_x) <= 1 && y.abs_diff(*num_y) <= 1 {
                             hits.push(num.number());
+                            /*
                             println!(
                                 "Hit at: [{num_x}, {num_y}], added {}, hits={}",
                                 num.number(),
                                 hits.len()
                             );
+                            */
                             break;
                         }
                     }
@@ -125,27 +120,6 @@ impl Engine {
 
     fn part_number_sum(&self) -> usize {
         self.numbers.iter().filter_map(|n| n.count()).sum()
-    }
-
-    fn has_neighbour_symbol(&self, x: usize, y: usize) -> bool {
-        let x = x as i32;
-        let y = y as i32;
-
-        for i in -1..2 {
-            for j in -1..2 {
-                let new_x = (x + i) as usize;
-                let new_y = (y + j) as usize;
-
-                if let Some(row) = self.schematic.get(new_y) {
-                    if let Some(cell) = row.get(new_x) {
-                        if let Cell::Symbol(_) = cell {
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-        false
     }
 }
 
