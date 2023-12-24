@@ -67,7 +67,7 @@ fn solve1(s: &str) -> usize {
         .map(|race| {
             (0..race.lasts + 1)
                 .into_iter()
-                .map(|n| if boat.simulate(race, n) { 1 } else { 0 })
+                .map(|n| boat.simulate(race, n) as usize)
                 .sum::<usize>()
         })
         .product()
@@ -82,7 +82,7 @@ fn solve2(s: &str) -> usize {
 
     (0..race.lasts + 1)
         .into_iter()
-        .map(|n| if boat.simulate(&race, n) { 1 } else { 0 })
+        .map(|n| boat.simulate(&race, n) as usize)
         .sum()
 }
 
