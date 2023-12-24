@@ -41,20 +41,17 @@ fn races(s: &str) -> Vec<Race> {
 }
 
 struct Boat {
-    // millimeters per second
     inital_speed: usize,
-    // millimeters per second
     acceleration: usize,
 }
 
 impl Boat {
-    fn simulate(&mut self, race: &Race, hold_button: usize) -> (usize, usize, bool) {
+    fn simulate(&mut self, race: &Race, hold_button: usize) -> bool {
         let speed = self.inital_speed + self.acceleration * hold_button;
         let time_left = race.lasts - hold_button;
         let moved = time_left * speed;
-        let won = time_left < race.lasts && moved > race.distance;
 
-        (time_left, moved, won)
+        time_left < race.lasts && moved > race.distance
     }
 }
 
@@ -65,19 +62,15 @@ fn solve1(s: &str) -> usize {
         acceleration: 1,
     };
 
-    let mut nums = vec![];
-    for race in races.iter() {
-        let mut won_races = 0;
-        for n in 0..race.lasts + 1 {
-            let (time_left, moved, won) = boat.simulate(race, n);
-            //println!("n: {n}, time_left: {time_left}, moved: {moved}, won: {won}");
-            if won {
-                won_races += 1;
-            }
-        }
-        nums.push(won_races);
-    }
-    nums.iter().product()
+    races
+        .iter()
+        .map(|race| {
+            (0..race.lasts + 1)
+                .into_iter()
+                .map(|n| if boat.simulate(race, n) { 1 } else { 0 })
+                .sum::<usize>()
+        })
+        .product()
 }
 
 fn solve2(s: &str) -> usize {
@@ -87,15 +80,10 @@ fn solve2(s: &str) -> usize {
         acceleration: 1,
     };
 
-    let mut won_races = 0;
-    for n in 0..race.lasts + 1 {
-        let (time_left, moved, won) = boat.simulate(&race, n);
-        //println!("n: {n}, time_left: {time_left}, moved: {moved}, won: {won}");
-        if won {
-            won_races += 1;
-        }
-    }
-    won_races
+    (0..race.lasts + 1)
+        .into_iter()
+        .map(|n| if boat.simulate(&race, n) { 1 } else { 0 })
+        .sum()
 }
 
 pub fn answer1() {
@@ -112,7 +100,6 @@ pub fn answer2() {
 fn test1() {
     let input = "Time:      7  15   30
         Distance:  9  40  200";
-
     assert_eq!(288, solve1(input));
 }
 
